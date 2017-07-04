@@ -1,0 +1,8 @@
+D:\Projects\生鮮\Agent_LCU_v1\Agent_ISHIDA\bin\Release\Agent_ISHIDA.exe.config
+D:\Projects\生鮮\Agent_LCU_v1\Agent_ISHIDA\bin\Release\Agent_ISHIDA.exe
+D:\Projects\生鮮\Agent_LCU_v1\Agent_ISHIDA\bin\Release\Agent_ISHIDA.pdb
+D:\Projects\生鮮\Agent_LCU_v1\Agent_ISHIDA\obj\Release\ResolveAssemblyReference.cache
+D:\Projects\生鮮\Agent_LCU_v1\Agent_ISHIDA\obj\Release\Agent_ISHIDA.Properties.Resources.resources
+D:\Projects\生鮮\Agent_LCU_v1\Agent_ISHIDA\obj\Release\Agent_ISHIDA.csproj.GenerateResource.Cache
+D:\Projects\生鮮\Agent_LCU_v1\Agent_ISHIDA\obj\Release\Agent_ISHIDA.exe
+D:\Projects\生鮮\Agent_LCU_v1\Agent_ISHIDA\obj\Release\Agent_ISHIDA.pdb

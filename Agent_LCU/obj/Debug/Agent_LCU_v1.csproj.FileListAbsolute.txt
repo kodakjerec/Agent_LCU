@@ -1,0 +1,6 @@
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU_v1\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU_v1\bin\Debug\Agent_LCU.exe.config
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU_v1\bin\Debug\Agent_LCU.exe
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU_v1\bin\Debug\Agent_LCU.pdb
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU_v1\obj\Debug\Agent_LCU.exe
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU_v1\obj\Debug\Agent_LCU.pdb

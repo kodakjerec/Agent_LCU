@@ -1,0 +1,9 @@
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU_v1\bin\Release\Agent_LCU.exe.config
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU_v1\obj\Release\Agent_LCU.exe
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU_v1\obj\Release\Agent_LCU.pdb
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU\obj\Release\ResolveAssemblyReference.cache
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU\bin\Release\LCU_TERAOKA_LCU_1.exe.config
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU\bin\Release\LCU_TERAOKA_LCU_1.exe
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU\bin\Release\LCU_TERAOKA_LCU_1.pdb
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU\obj\Release\LCU_TERAOKA_LCU_1.exe
+D:\Projects\生鮮\Agent_LCU_v1\Agent_LCU\obj\Release\LCU_TERAOKA_LCU_1.pdb
