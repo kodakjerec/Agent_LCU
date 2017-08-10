@@ -87,31 +87,30 @@ namespace Agent_ISHIDA
             if (dt_Inbound_ISHIDA_TXT.Rows.Count > 0)
             {
                 #region 輸出指定編號的TXT
-                StreamWriter sw_OutPutTXT = new StreamWriter(FilePath, false, System.Text.Encoding.UTF8);
-                string data = "";
-                int ColumnCount = dt_Inbound_ISHIDA_TXT.Columns.Count;
-                int i = 0;
-
-                data += "\n";   //取代欄位定義, 第一行留白, 第二行起才是實際資料
-
-                foreach (DataRow row in dt_Inbound_ISHIDA_TXT.Rows)
+                using (StreamWriter sw_OutPutTXT = new StreamWriter(FilePath, false, System.Text.Encoding.UTF8))
                 {
-                    i = 0;
-                    foreach (DataColumn column in dt_Inbound_ISHIDA_TXT.Columns)
+                    string data = "";
+                    int ColumnCount = dt_Inbound_ISHIDA_TXT.Columns.Count;
+                    int i = 0;
+
+                    data += "\n";   //取代欄位定義, 第一行留白, 第二行起才是實際資料
+
+                    foreach (DataRow row in dt_Inbound_ISHIDA_TXT.Rows)
                     {
-                        data += row[column].ToString().Trim();
-                        i++;
-                        if (i < ColumnCount)
-                            data += ",";
+                        i = 0;
+                        foreach (DataColumn column in dt_Inbound_ISHIDA_TXT.Columns)
+                        {
+                            data += row[column].ToString().Trim();
+                            i++;
+                            if (i < ColumnCount)
+                                data += ",";
+                        }
+                        data += "\n";
+                        sw_OutPutTXT.Write(data);
+                        data = "";
                     }
                     data += "\n";
-                    sw_OutPutTXT.Write(data);
-                    data = "";
                 }
-                data += "\n";
-
-                sw_OutPutTXT.Dispose();
-                sw_OutPutTXT.Close();
 
                 //備份上傳資料
                 File.Copy(FilePath, FilePath_SendBackup);
@@ -127,7 +126,7 @@ namespace Agent_ISHIDA
                 #region 下傳TXT.tmp, 確定下傳完成後再更改名稱
                 Program.ftpclient.upload(FileName + ".tmp", FilePath);
 
-                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileName + ".tmp", ref Program.ftpclient,0);
+                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileName + ".tmp", ref Program.ftpclient, 0);
                 if (ErrMsg != "")
                 {
                     return ErrMsg;
@@ -141,8 +140,9 @@ namespace Agent_ISHIDA
                 #region 檢查檔案是否已經成功上傳,ISHIDA會回傳【結果】
                 FilePath = Program.FileDirectory + @"\" + FileNameReturn;     //輸出文字檔目錄
 
-                ErrMsg=Program.comQryLCU.FTPCheckFileUploadOK(FileNameReturn, ref Program.ftpclient,0);
-                if (ErrMsg != "") {
+                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileNameReturn, ref Program.ftpclient, 0);
+                if (ErrMsg != "")
+                {
                     return ErrMsg;
                 }
                 #endregion
@@ -163,40 +163,42 @@ namespace Agent_ISHIDA
                 #endregion
 
                 #region 解析【ISHIDA回傳結果】是否正常
-                StreamReader s = new StreamReader(FilePath, System.Text.Encoding.UTF8);
-                string AllData = s.ReadToEnd();
-                string[] rows = AllData.Split("\n".ToCharArray());
-
-
-                foreach (string r in rows)
+                using (StreamReader s = new StreamReader(FilePath, System.Text.Encoding.UTF8))
                 {
-                    string[] items = r.Split(',');
-                    //第一行是欄位名稱
-                    //第二行裁示回傳結果
-                    if (items[0] == TXTfile_ReturnValue)
+                    string AllData = s.ReadToEnd();
+                    string[] rows = AllData.Split("\n".ToCharArray());
+
+
+                    foreach (string r in rows)
                     {
-                        //異常
-                        if (items[1] == "9")
+                        string[] items = r.Split(',');
+                        //第一行是欄位名稱
+                        //第二行裁示回傳結果
+                        if (items[0] == TXTfile_ReturnValue)
                         {
-                            string MSG = items[3];
-                            MSG = MSG.Substring(MSG.IndexOf("(") + 1, MSG.IndexOf(")") - MSG.IndexOf("(")-1);
-                            switch (MSG)
+                            //異常
+                            if (items[1] == "9")
                             {
-                                case "400040":  //已經生產完成
-                                    break;
-                                case "500060":  //主檔中未登錄
-                                    break;
-                                case "500030":  //找不到要刪除的資料
-                                    break;
-                                default:
-                                    ErrMsg += "ERROR: Line:" + items[2] + " Msg:" + items[3] + "\n";
-                                    break;
+                                string MSG = items[3];
+                                MSG = MSG.Substring(MSG.IndexOf("(") + 1, MSG.IndexOf(")") - MSG.IndexOf("(") - 1);
+                                switch (MSG)
+                                {
+                                    case "400040":  //已經生產完成
+                                        break;
+                                    case "500060":  //主檔中未登錄
+                                        break;
+                                    case "500030":  //找不到要刪除的資料
+                                        break;
+                                    default:
+                                        ErrMsg += "ERROR: Line:" + items[2] + " Msg:" + items[3] + "\n";
+                                        break;
+                                }
+                                continue;
                             }
-                            continue;
-                        }
-                        else
-                        {
-                            Program.comQryLCU.Agent_WriteLog(" 成功刪除筆數" + items[4]);
+                            else
+                            {
+                                Program.comQryLCU.Agent_WriteLog(" 成功刪除筆數" + items[4]);
+                            }
                         }
                     }
                 }

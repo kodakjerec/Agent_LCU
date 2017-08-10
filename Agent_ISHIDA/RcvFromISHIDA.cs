@@ -44,31 +44,30 @@ namespace Agent_ISHIDA
                 Program.comQryLCU.Step = "回收TXT";
 
                 #region 輸出指定編號的TXT
-                StreamWriter sw_OutPutTXT = new StreamWriter(FilePath, false, System.Text.Encoding.UTF8);
-                string data = "";
-                int ColumnCount = dt_Inbound_ISHIDA_TXT.Columns.Count;
-                int i = 0;
-
-                data += "\n";   //取代欄位定義, 第一行留白, 第二行起才是實際資料
-
-                foreach (DataRow row in dt_Inbound_ISHIDA_TXT.Rows)
+                using (StreamWriter sw_OutPutTXT = new StreamWriter(FilePath, false, System.Text.Encoding.UTF8))
                 {
-                    i = 0;
-                    foreach (DataColumn column in dt_Inbound_ISHIDA_TXT.Columns)
+                    string data = "";
+                    int ColumnCount = dt_Inbound_ISHIDA_TXT.Columns.Count;
+                    int i = 0;
+
+                    data += "\n";   //取代欄位定義, 第一行留白, 第二行起才是實際資料
+
+                    foreach (DataRow row in dt_Inbound_ISHIDA_TXT.Rows)
                     {
-                        data += row[column].ToString().Trim();
-                        i++;
-                        if (i < ColumnCount)
-                            data += ",";
+                        i = 0;
+                        foreach (DataColumn column in dt_Inbound_ISHIDA_TXT.Columns)
+                        {
+                            data += row[column].ToString().Trim();
+                            i++;
+                            if (i < ColumnCount)
+                                data += ",";
+                        }
+                        data += "\n";
+                        sw_OutPutTXT.Write(data);
+                        data = "";
                     }
                     data += "\n";
-                    sw_OutPutTXT.Write(data);
-                    data = "";
                 }
-                data += "\n";
-
-                sw_OutPutTXT.Dispose();
-                sw_OutPutTXT.Close();
                 #endregion
 
                 #region 清除ftp舊資料
@@ -81,7 +80,7 @@ namespace Agent_ISHIDA
                 #region 下傳TXT.tmp, 確定下傳完成後再更改名稱
                 Program.ftpclient.upload(FileName + ".tmp", FilePath);
 
-                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileName + ".tmp", ref Program.ftpclient,0);
+                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileName + ".tmp", ref Program.ftpclient, 0);
                 if (ErrMsg != "")
                 {
                     return ErrMsg;
@@ -95,7 +94,7 @@ namespace Agent_ISHIDA
                 #region 檢查檔案是否已經成功上傳,ISHIDA會回傳【分揀實績】
                 FilePath = Program.FileDirectory + @"\" + FileNameReturn;     //輸出文字檔目錄
 
-                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileNameReturn, ref Program.ftpclient,0);
+                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileNameReturn, ref Program.ftpclient, 0);
                 if (ErrMsg != "")
                 {
                     return ErrMsg;
@@ -127,7 +126,7 @@ namespace Agent_ISHIDA
                     String AllData = sr.ReadToEnd();
                     AllData = AllData.Replace("\r", "");   //回收檔案有\r, 過濾掉
                     string[] rows = AllData.Split("\n".ToCharArray());
-                    for (int row_Number=1; row_Number < rows.Length; row_Number++)
+                    for (int row_Number = 1; row_Number < rows.Length; row_Number++)
                     {
                         String[] inputList = rows[row_Number].Split(',');
                         int inputListLength = inputList.Length;

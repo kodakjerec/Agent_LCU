@@ -18,3 +18,13 @@ F:\Projects\生鮮\LCU同步\Agent_LCU_v1\Agent_ClassLibrary\bin\Debug\Newtonsof
 F:\Projects\生鮮\LCU同步\Agent_LCU_v1\Agent_ClassLibrary\obj\Debug\Agent_ClassLibrary.dll
 F:\Projects\生鮮\LCU同步\Agent_LCU_v1\Agent_ClassLibrary\obj\Debug\Agent_ClassLibrary.pdb
 F:\Projects\生鮮\LCU同步\Agent_LCU_v1\Agent_ClassLibrary\obj\Debug\Agent_ClassLibrary.csprojResolveAssemblyReference.cache
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_ClassLibrary\bin\Debug\DB_IO_Database_json.txt
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_ClassLibrary\bin\Debug\Settings.txt
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_ClassLibrary\bin\Debug\Agent_ClassLibrary.dll
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_ClassLibrary\bin\Debug\Agent_ClassLibrary.pdb
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_ClassLibrary\bin\Debug\DB_IO.dll
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_ClassLibrary\bin\Debug\Newtonsoft.Json.dll
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_ClassLibrary\bin\Debug\Newtonsoft.Json.xml
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_ClassLibrary\obj\Debug\Agent_ClassLibrary.csprojResolveAssemblyReference.cache
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_ClassLibrary\obj\Debug\Agent_ClassLibrary.dll
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_ClassLibrary\obj\Debug\Agent_ClassLibrary.pdb

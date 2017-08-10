@@ -97,7 +97,7 @@ namespace Agent_ISHIDA
             string FileName = "ISHIDA_" + TXTfile_KeyValue + ".csv"                 //檔案名稱
                 , FileNameReturn = "ISHIDA_" + TXTfile_ReturnValue + "_ANS.csv"
                 , FilePath = Program.FileDirectory + @"\" + FileName     //輸出文字檔目錄
-                , FilePath_SendBackup = Program.FileDirectory_SendBackup+@"\" + DateTime.Now.ToString("yyyyMMddHHmmss") + FileName   //備份檔案
+                , FilePath_SendBackup = Program.FileDirectory_SendBackup + @"\" + DateTime.Now.ToString("yyyyMMddHHmmss") + FileName   //備份檔案
                 , FilePath_ReturnBackup = Program.FileDirectory_ReturnBackup + @"\" + DateTime.Now.ToString("yyyyMMddHHmmss") + FileNameReturn;  //備份檔案
 
             #region 呼叫sp轉換成TXT
@@ -109,31 +109,30 @@ namespace Agent_ISHIDA
             if (dt_Inbound_ISHIDA_TXT.Rows.Count > 0)
             {
                 #region 輸出指定編號的TXT
-                StreamWriter sw_OutPutTXT = new StreamWriter(FilePath, false, System.Text.Encoding.UTF8);
-                string data = "";
-                int ColumnCount = dt_Inbound_ISHIDA_TXT.Columns.Count;
-                int i = 0;
-
-                data += "\n";   //取代欄位定義, 第一行留白, 第二行起才是實際資料
-
-                foreach (DataRow row in dt_Inbound_ISHIDA_TXT.Rows)
+                using (StreamWriter sw_OutPutTXT = new StreamWriter(FilePath, false, System.Text.Encoding.UTF8))
                 {
-                    i = 0;
-                    foreach (DataColumn column in dt_Inbound_ISHIDA_TXT.Columns)
+                    string data = "";
+                    int ColumnCount = dt_Inbound_ISHIDA_TXT.Columns.Count;
+                    int i = 0;
+
+                    data += "\n";   //取代欄位定義, 第一行留白, 第二行起才是實際資料
+
+                    foreach (DataRow row in dt_Inbound_ISHIDA_TXT.Rows)
                     {
-                        data += row[column].ToString();
-                        i++;
-                        if (i < ColumnCount)
-                            data += ",";
+                        i = 0;
+                        foreach (DataColumn column in dt_Inbound_ISHIDA_TXT.Columns)
+                        {
+                            data += row[column].ToString();
+                            i++;
+                            if (i < ColumnCount)
+                                data += ",";
+                        }
+                        data += "\n";
+                        sw_OutPutTXT.Write(data);
+                        data = "";
                     }
                     data += "\n";
-                    sw_OutPutTXT.Write(data);
-                    data = "";
                 }
-                data += "\n";
-
-                sw_OutPutTXT.Dispose();
-                sw_OutPutTXT.Close();
 
                 //備份上傳資料
                 File.Copy(FilePath, FilePath_SendBackup);
@@ -149,7 +148,7 @@ namespace Agent_ISHIDA
                 #region 下傳TXT.tmp, 確定下傳完成後再更改名稱
                 Program.ftpclient.upload(FileName + ".tmp", FilePath);
 
-                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileName + ".tmp", ref Program.ftpclient,0);
+                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileName + ".tmp", ref Program.ftpclient, 0);
                 if (ErrMsg != "")
                 {
                     return ErrMsg;
@@ -163,7 +162,7 @@ namespace Agent_ISHIDA
                 #region 檢查檔案是否已經成功上傳,ISHIDA會回傳【結果】
                 FilePath = Program.FileDirectory + @"\" + FileNameReturn;     //輸出文字檔目錄
 
-                ErrMsg=Program.comQryLCU.FTPCheckFileUploadOK(FileNameReturn, ref Program.ftpclient,0);
+                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileNameReturn, ref Program.ftpclient, 0);
                 if (ErrMsg != "")
                 {
                     return ErrMsg;
@@ -186,35 +185,37 @@ namespace Agent_ISHIDA
                 #endregion
 
                 #region 解析【ISHIDA回傳結果】是否正常
-                StreamReader s = new StreamReader(FilePath, System.Text.Encoding.UTF8);
-                string AllData = s.ReadToEnd();
-                string[] rows = AllData.Split("\n".ToCharArray());
-
-
-                foreach (string r in rows)
+                using (StreamReader s = new StreamReader(FilePath, System.Text.Encoding.UTF8))
                 {
-                    string[] items = r.Split(',');
-                    //第一行是欄位名稱
-                    //第二行裁示回傳結果
-                    if (items[0] == TXTfile_ReturnValue)
+                    string AllData = s.ReadToEnd();
+                    string[] rows = AllData.Split("\n".ToCharArray());
+
+
+                    foreach (string r in rows)
                     {
-                        //異常
-                        if (items[1] == "9")
+                        string[] items = r.Split(',');
+                        //第一行是欄位名稱
+                        //第二行裁示回傳結果
+                        if (items[0] == TXTfile_ReturnValue)
                         {
-                            ErrMsg += "ERROR: Line:" + items[2] + " Msg:" + items[3] + "\n";
-                            continue;
-                        }
-                        else
-                        {
-                            if (ErrMsg != "")
+                            //異常
+                            if (items[1] == "9")
                             {
-                                Program.comQryLCU.Agent_WriteLog(ErrMsg);
-                                string UpdateDB = "SFD001NO";
-                                Program.comQryISHIDA.GetTxtFromISHIDA(ref UpdateDB, ref GUID);
-                                return "";
+                                ErrMsg += "ERROR: Line:" + items[2] + " Msg:" + items[3] + "\n";
+                                continue;
                             }
                             else
-                                Program.comQryLCU.Agent_WriteLog(" 成功更新筆數" + items[4]);
+                            {
+                                if (ErrMsg != "")
+                                {
+                                    Program.comQryLCU.Agent_WriteLog(ErrMsg);
+                                    string UpdateDB = "SFD001NO";
+                                    Program.comQryISHIDA.GetTxtFromISHIDA(ref UpdateDB, ref GUID);
+                                    return "";
+                                }
+                                else
+                                    Program.comQryLCU.Agent_WriteLog(" 成功更新筆數" + items[4]);
+                            }
                         }
                     }
                 }
@@ -232,21 +233,5 @@ namespace Agent_ISHIDA
 
             return ErrMsg;
         }
-
-        #region 其他函數
-        /// <summary>
-        /// 比對兩個時間的差異秒數
-        /// </summary>
-        /// <param name="d1">時間1(較新)</param>
-        /// <param name="d2">時間2(較晚)</param>
-        /// <returns></returns>
-        private static int CompareTwoTime(DateTime d1, DateTime d2)
-        {
-            TimeSpan t1 = new TimeSpan(d1.Ticks),
-                     t2 = new TimeSpan(d2.Ticks);
-            TimeSpan ts = t1.Subtract(t2).Duration();
-            return ts.Seconds;
-        }
-        #endregion
     }
 }

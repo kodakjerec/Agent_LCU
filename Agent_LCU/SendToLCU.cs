@@ -97,22 +97,21 @@ namespace Agent_LCU
             if (dt_Inbound_LCU_TXT.Rows.Count > 0)
             {
                 #region 輸出指定編號的TXT
-                StreamWriter sw_OutPutTXT = new StreamWriter(FilePath, false, System.Text.Encoding.Default);
-                string data = "";
-                foreach (DataRow row in dt_Inbound_LCU_TXT.Rows)
+                using (StreamWriter sw_OutPutTXT = new StreamWriter(FilePath, false, System.Text.Encoding.Default))
                 {
-                    foreach (DataColumn column in dt_Inbound_LCU_TXT.Columns)
+                    string data = "";
+                    foreach (DataRow row in dt_Inbound_LCU_TXT.Rows)
                     {
-                        data += row[column].ToString() + ",";
+                        foreach (DataColumn column in dt_Inbound_LCU_TXT.Columns)
+                        {
+                            data += row[column].ToString() + ",";
+                        }
+                        data += "\n";
+                        sw_OutPutTXT.Write(data);
+                        data = "";
                     }
                     data += "\n";
-                    sw_OutPutTXT.Write(data);
-                    data = "";
                 }
-                data += "\n";
-
-                sw_OutPutTXT.Dispose();
-                sw_OutPutTXT.Close();
 
                 //備份上傳資料
                 File.Copy(FilePath, FilePath_SendBackup);

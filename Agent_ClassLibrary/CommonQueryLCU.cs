@@ -54,13 +54,10 @@ namespace Agent_ClassLibrary
         /// <summary>
         /// 更改待執行清單(執行結果正確)
         /// </summary>
-        /// <param name="DEVICE_AREA"></param>
-        /// <param name="DEVICE_ID"></param>
-        /// <param name="GUID"></param>
-        /// <param name="SpName"></param>
-        /// <param name="Step"></param>
+        /// <param name="ORDER_TYPE"></param>
+        /// <param name="GUID_Msg"></param>
         /// <returns></returns>
-        public void UpdMiddleList(string ORDER_TYPE)
+        public void UpdMiddleList(string ORDER_TYPE, string GUID_Msg)
         {
             Hashtable ht_Query = new Hashtable();
             ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
@@ -68,6 +65,7 @@ namespace Agent_ClassLibrary
             ht_Query.Add("@Status", 2);
             ht_Query.Add("@OrderType", ORDER_TYPE);
             ht_Query.Add("@Memo", "");
+            ht_Query.Add("@GUID_Msg", GUID_Msg);
             Hashtable ht_Return = new Hashtable();
 
             db_io.SqlSp("DDI_UNDER", "spUD_LCU_TERAOKA_V1_EXAMINE", ht_Query, ref ht_Return);
@@ -76,7 +74,9 @@ namespace Agent_ClassLibrary
         /// 執行結果錯誤
         /// </summary>
         /// <param name="ORDER_TYPE"></param>
-        public void UpdMiddleList(string ORDER_TYPE, string MEMO)
+        /// <param name="MEMO"></param>
+        /// <param name="GUID_Msg"></param>
+        public void UpdMiddleList(string ORDER_TYPE, string GUID_Msg, string MEMO)
         {
             if (MEMO.Length > 20)
                 MEMO = MEMO.Substring(0, 20);
@@ -86,6 +86,7 @@ namespace Agent_ClassLibrary
             ht_Query.Add("@Status", 3);
             ht_Query.Add("@OrderType", ORDER_TYPE);
             ht_Query.Add("@Memo", MEMO);
+            ht_Query.Add("@GUID_Msg", GUID_Msg);
             Hashtable ht_Return = new Hashtable();
 
             db_io.SqlSp("DDI_UNDER", "spUD_LCU_TERAOKA_V1_EXAMINE", ht_Query, ref ht_Return);
