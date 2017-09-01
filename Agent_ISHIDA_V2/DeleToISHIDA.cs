@@ -184,9 +184,11 @@ namespace Agent_ISHIDA
                             {
                                 case "400040":  //已經生產完成
                                     break;
-                                case "500060":  //主檔中未登錄
-                                    break;
                                 case "500030":  //找不到要刪除的資料
+                                    break;
+                                case "500050":  //要登錄的資料已有登錄了
+                                    break;
+                                case "500060":  //主檔中未登錄
                                     break;
                                 default:
                                     ErrMsg += "ERROR: Line:" + items[2] + " Msg:" + items[3] + "\n";

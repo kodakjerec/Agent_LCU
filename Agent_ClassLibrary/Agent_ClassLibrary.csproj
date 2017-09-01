@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="CommonQueryISHIDA.cs" />
     <Compile Include="CommonQueryLCU.cs" />
+    <Compile Include="CommonQuery_forSMD.cs" />
     <Compile Include="ftpClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

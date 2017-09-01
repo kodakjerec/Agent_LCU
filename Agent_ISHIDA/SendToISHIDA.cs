@@ -201,7 +201,22 @@ namespace Agent_ISHIDA
                             //異常
                             if (items[1] == "9")
                             {
-                                ErrMsg += "ERROR: Line:" + items[2] + " Msg:" + items[3] + "\n";
+                                string MSG = items[3];
+                                MSG = MSG.Substring(MSG.IndexOf("(") + 1, MSG.IndexOf(")") - MSG.IndexOf("(") - 1);
+                                switch (MSG)
+                                {
+                                    case "400040":  //已經生產完成
+                                        break;
+                                    case "500030":  //找不到要刪除的資料
+                                        break;
+                                    case "500050":  //要登錄的資料已有登錄了
+                                        break;
+                                    case "500060":  //主檔中未登錄
+                                        break;
+                                    default:
+                                        ErrMsg += "ERROR: Line:" + items[2] + " Msg:" + items[3] + "\n";
+                                        break;
+                                }
                                 continue;
                             }
                             else
