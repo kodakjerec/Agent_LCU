@@ -34,6 +34,25 @@ namespace Agent_ClassLibrary
             DataTable dt = db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_return).Tables[0];
             return dt;
         }
+        /// <summary>
+        /// 取得TXT(含參數)
+        /// </summary>
+        /// <param name="TXTFileName"></param>
+        /// <param name="BATCHID"></param>
+        /// <param name="Mode"></param>
+        /// <returns></returns>
+        public DataTable GetTxtFromISHIDA(ref string TXTFileName, ref string BATCHID, string Mode)
+        {
+            string cmd_Query = "spUD_LCU_ISHIDA_PCRS_V1_CreateTXT";
+            Hashtable ht_Query = new Hashtable();
+            ht_Query.Add("@TXTName", TXTFileName);
+            ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
+            ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
+            ht_Query.Add("@Mode", Mode);
+            Hashtable ht_return = new Hashtable();
+            DataTable dt = db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_return).Tables[0];
+            return dt;
+        }
         public DataTable GetTxtFromISHIDA_V2(ref string TXTFileName, ref string BATCHID)
         {
             string cmd_Query = "spUD_LCU_ISHIDA_PCRS_V2_CreateTXT";

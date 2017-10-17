@@ -362,6 +362,20 @@ namespace Agent_ClassLibrary
             TXTFileName = ht_return["@S_result"].ToString();
             return dt;
         }
+        public DataTable GetTxtFromLCU(ref string TXTFileName, ref string BATCHID, string Mode)
+        {
+            string cmd_Query = "spUD_LCU_TERAOKA_LCU700_V1_CreateTXT";
+            Hashtable ht_Query = new Hashtable();
+            ht_Query.Add("@TXTName", TXTFileName);
+            ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
+            ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
+            ht_Query.Add("@Mode", Mode);
+            Hashtable ht_return = new Hashtable();
+            ht_return.Add("@S_result", "");
+            DataTable dt = db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_return).Tables[0];
+            TXTFileName = ht_return["@S_result"].ToString();
+            return dt;
+        }
         public DataTable GetTxtFromLCU_V2(ref string TXTFileName, ref string BATCHID)
         {
             string cmd_Query = "spUD_LCU_TERAOKA_LCU700_V2_CreateTXT";

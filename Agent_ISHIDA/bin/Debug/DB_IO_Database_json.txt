@@ -10,5 +10,9 @@
   {
     "PK": "DDI_UPPER",
     "ConnectionString": "Data Source=192.168.100.134 ;Initial Catalog=DDI_UPPER ;User Id=ncf;Password=ksi;Connection Timeout=5"
+  },
+  {
+    "PK": "SMD",
+    "ConnectionString": "Data Source=192.168.100.65 ;Initial Catalog=SMD ;User Id=ncf;Password=ksi;Connection Timeout=5;Application Name=SmartQuery"
   }
 ]

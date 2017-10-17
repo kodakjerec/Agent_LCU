@@ -10,10 +10,16 @@ select * from SMD_DEVICE where ID like 'PC4%'
 DECLARE 
 	@DEVICE_AREA	varchar(50)='A4WS1'	--不用改
 	,@DEVICE_ID		varchar(50)='LCU1'	--不用改
-	,@HID			varchar(50)='\PXG\SMD\PC4\LCU700\'
-	,@D_DATE		varchar(10)='2017-08-31' 
-	,@CALLING_NUM	varchar(10)='311381'
+	,@ID			varchar(50)='PC1LCUDAS'
+	,@D_DATE		varchar(10)='2017-09-27' 
+	,@CALLING_NUM	varchar(10)='310664'
 
+
+--取得HID
+DECLARE @HID varchar(50)=''
+select @HID=HID
+from [192.168.100.65].SMD.dbo.SMD_DEVICE with(nolock)
+where ID='PC1LCUDAS'
 
 --自動取得當期OrderNo
 DECLARE @OrderNo varchar(50)=''
@@ -28,7 +34,8 @@ BEGIN
 	RAISERROR ('批次不存在',16,1)
 END
 
-TRUNCATE TABLE [dbo].[ob.DDI_UD_LCU_TERAOKA_LCU700_V2_HST0023]
+DELETE FROM [ob.DDI_UD_LCU_TERAOKA_LCU700_V2_HST0023]
+WHERE Field03=@CALLING_NUM
 
 INSERT INTO [ob.DDI_UD_LCU_TERAOKA_LCU700_V2_HST0023]
 select 
@@ -41,7 +48,7 @@ select
 	,Field07=convert(int,convert(decimal(9,2),PD.PRICE_P))	--售價
 	,Field08=QTY
 	,Field09='DD'
-	,Field10=CASE ISNULL(SAV.SAVING_TYPE, IT.SAVING_TYPE) WHEN 11 THEN 1 WHEN 12 THEN 2 ELSE 'DDDD' END	--AD_TEXT
+	,Field10=CASE ISNULL(SAV.SAVING_TYPE, IT.SAVING_TYPE) WHEN 11 THEN '1' WHEN 12 THEN '2' ELSE 'DDDD' END	--AD_TEXT
 	,Field11='DDDD'
 	,Field12=PD.PRICE_TYPE			--計價模式
 	,Field13=PD.PROMO_PRICE_FLAG	--特賣設定

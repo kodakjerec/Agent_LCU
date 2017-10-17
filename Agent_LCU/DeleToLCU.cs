@@ -47,7 +47,7 @@ namespace Agent_LCU
             #region 根據檔案類別, 輸出空白TXT
             using (StreamWriter sw_OutPutSPACETXT = new StreamWriter(FilePath, false, System.Text.Encoding.Default))
             {
-                sw_OutPutSPACETXT.Write("");
+                sw_OutPutSPACETXT.Write("CS");
                 sw_OutPutSPACETXT.Dispose();
                 sw_OutPutSPACETXT.Close();
                 Program.ftpclient.upload(FileName, FilePath);

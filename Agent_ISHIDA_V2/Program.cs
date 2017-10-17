@@ -163,7 +163,7 @@ namespace Agent_ISHIDA
                                 GUID_Msg = drs_ORDER_TYPE[0]["GUID_Msg"].ToString();
 
                                 ErrMsg = "";
-                                ErrMsg = program1.MainFunction(ORDER_TYPE, OrderNo);
+                                ErrMsg = program1.MainFunction(ORDER_TYPE, OrderNo, "0");
                                 ErrMsg_LCU_Active(ORDER_TYPE, GUID_Msg, ErrMsg);
                             }
                             #endregion
@@ -174,6 +174,19 @@ namespace Agent_ISHIDA
 
                             if (drs_ORDER_TYPE.Length > 0)
                             {
+                                #region 清除實績前先作"強制性"的完整回收
+                                string Force = "1";
+
+                                RcvFromISHIDA program0 = new RcvFromISHIDA();
+
+                                ORDER_TYPE = "20";
+                                OrderNo = drs_ORDER_TYPE[0]["OrderNo"].ToString();
+                                GUID_Msg = drs_ORDER_TYPE[0]["GUID_Msg"].ToString();
+
+                                ErrMsg = "";
+                                ErrMsg = program0.MainFunction(ORDER_TYPE, OrderNo, Force);
+                                #endregion
+
                                 DeleToISHIDA program1 = new DeleToISHIDA();
 
                                 ORDER_TYPE = drs_ORDER_TYPE[0]["ORDER_TYPE"].ToString();

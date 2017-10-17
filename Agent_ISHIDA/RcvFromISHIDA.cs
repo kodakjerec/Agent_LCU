@@ -11,7 +11,7 @@ namespace Agent_ISHIDA
         /// 主程式
         /// </summary>
         /// <param name="args"></param>
-        public string MainFunction(string ORDER_TYPE, string OrderNo)
+        public string MainFunction(string ORDER_TYPE, string OrderNo, string IsForce)
         {
             Program.comQryLCU.Step = "錯誤處理";
             string ErrMsg = "";
@@ -34,7 +34,7 @@ namespace Agent_ISHIDA
             #endregion
 
             #region 呼叫sp轉換成TXT
-            DataTable dt_Inbound_ISHIDA_TXT = Program.comQryISHIDA.GetTxtFromISHIDA(ref TXTfile_KeyValue, ref OrderNo);
+            DataTable dt_Inbound_ISHIDA_TXT = Program.comQryISHIDA.GetTxtFromISHIDA(ref TXTfile_KeyValue, ref OrderNo, IsForce);
             Program.comQryLCU.Agent_WriteLog(" 取得TXT Count:" + dt_Inbound_ISHIDA_TXT.Rows.Count.ToString());
             #endregion
 

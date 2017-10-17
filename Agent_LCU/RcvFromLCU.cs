@@ -17,7 +17,7 @@ namespace Agent_LCU
         /// 主程式
         /// </summary>
         /// <param name="args"></param>
-        public string MainFunction(string ORDER_TYPE, string OrderNo)
+        public string MainFunction(string ORDER_TYPE, string OrderNo, string IsForce)
         {
             Program.comQryLCU.Step = "錯誤處理";
             string ErrMsg = "";
@@ -41,7 +41,7 @@ namespace Agent_LCU
             FileName = "HST0124.TXT";
             FilePath = Program.FileDirectory + @"\" + FileName;
             string TXTfile_KeyValue = "HST0124";
-            DataTable dt_Inbound_LCU_TXT = Program.comQryLCU.GetTxtFromLCU(ref TXTfile_KeyValue, ref OrderNo);
+            DataTable dt_Inbound_LCU_TXT = Program.comQryLCU.GetTxtFromLCU(ref TXTfile_KeyValue, ref OrderNo, IsForce);
             if (TXTfile_KeyValue=="FULL")
             {
                 using (StreamWriter sw_OutPutHST0124 = new StreamWriter(FilePath, false, System.Text.Encoding.Default))

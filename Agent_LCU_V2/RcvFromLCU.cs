@@ -17,7 +17,7 @@ namespace Agent_LCU
         /// 主程式
         /// </summary>
         /// <param name="args"></param>
-        public string MainFunction(string ORDER_TYPE, string OrderNo)
+        public string MainFunction(string ORDER_TYPE, string OrderNo, string IsForce)
         {
             Program.comQryLCU.Step = "錯誤處理";
             string ErrMsg = "";
@@ -41,25 +41,24 @@ namespace Agent_LCU
             FileName = "HST0124.TXT";
             FilePath = Program.FileDirectory + @"\" + FileName;
             string TXTfile_KeyValue = "HST0124";
-            DataTable dt_Inbound_LCU_TXT = Program.comQryLCU.GetTxtFromLCU(ref TXTfile_KeyValue, ref OrderNo);
+            DataTable dt_Inbound_LCU_TXT = Program.comQryLCU.GetTxtFromLCU(ref TXTfile_KeyValue, ref OrderNo, IsForce);
             if (TXTfile_KeyValue=="FULL")
             {
-                StreamWriter sw_OutPutHST0124 = new StreamWriter(FilePath, false, System.Text.Encoding.Default);
-                string data = "";
-                foreach (DataRow row in dt_Inbound_LCU_TXT.Rows)
+                using (StreamWriter sw_OutPutHST0124 = new StreamWriter(FilePath, false, System.Text.Encoding.Default))
                 {
-                    foreach (DataColumn column in dt_Inbound_LCU_TXT.Columns)
+                    string data = "";
+                    foreach (DataRow row in dt_Inbound_LCU_TXT.Rows)
                     {
-                        data += row[column].ToString() + ",";
+                        foreach (DataColumn column in dt_Inbound_LCU_TXT.Columns)
+                        {
+                            data += row[column].ToString() + ",";
+                        }
+                        data += "\n";
+                        sw_OutPutHST0124.Write(data);
+                        data = "";
                     }
                     data += "\n";
-                    sw_OutPutHST0124.Write(data);
-                    data = "";
                 }
-                data += "\n";
-                sw_OutPutHST0124.Dispose();
-                sw_OutPutHST0124.Close();
-
                 Program.ftpclient.upload(FileName, FilePath);
                 Program.comQryLCU.Agent_WriteLog(" 起始位置：" + dt_Inbound_LCU_TXT.Rows[0][1].ToString());
             }
@@ -69,10 +68,10 @@ namespace Agent_LCU
             FileName = "HST0201.TXT";
             FilePath = Program.FileDirectory + @"\" + FileName;
 
-            StreamWriter sw_OutPutHST0201 = new StreamWriter(FilePath, false, System.Text.Encoding.Default);
-            sw_OutPutHST0201.Write("");
-            sw_OutPutHST0201.Dispose();
-            sw_OutPutHST0201.Close();
+            using (StreamWriter sw_OutPutHST0201 = new StreamWriter(FilePath, false, System.Text.Encoding.Default))
+            {
+                sw_OutPutHST0201.Write("");
+            }
 
             Program.ftpclient.upload(FileName, FilePath);
             #endregion
