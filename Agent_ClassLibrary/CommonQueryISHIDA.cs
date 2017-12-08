@@ -39,7 +39,7 @@ namespace Agent_ClassLibrary
             ht_Query.Add("@TXTName", TXTFileName);
             ht_Query.Add("@DEVICE_AREA", comQryLCUforISHIDA.Parameter_DEVICE_AREA);
             ht_Query.Add("@DEVICE_ID", comQryLCUforISHIDA.Parameter_DEVICE_ID);
-            //ht_Query.Add("@OrderNo", BATCHID);
+
             Hashtable ht_return = new Hashtable();
             DataTable dt = db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_return).Tables[0];
             return dt;
@@ -63,7 +63,7 @@ namespace Agent_ClassLibrary
                     cmd_Query = "spUD_LCU_ISHIDA_PCRS_V2_CreateTXT";
                     break;
             }
-            comQryLCUforISHIDA.Agent_WriteLog("GetTxtFromISHIDA+Mode " + cmd_Query);
+            comQryLCUforISHIDA.Agent_WriteLog("GetTxtFromISHIDA:" + cmd_Query + " Mode:" + Mode);
 
             Hashtable ht_Query = new Hashtable();
             ht_Query.Add("@TXTName", TXTFileName);

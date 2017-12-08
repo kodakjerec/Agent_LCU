@@ -133,7 +133,8 @@ namespace Agent_ClassLibrary
             {
                 throw new Exception("無法取得ftp IP");
             }
-            else {
+            else
+            {
                 Parameter_DEVICE_IP = dt.Rows[0][0].ToString();
                 Parameter_Version = Convert.ToInt32(dt.Rows[0][1]);
             }
@@ -321,7 +322,7 @@ namespace Agent_ClassLibrary
         public void Agent_Clean()
         {
             string FilePathLog = System.AppDomain.CurrentDomain.BaseDirectory + "\\log";
-            string FilePath = System.AppDomain.CurrentDomain.BaseDirectory+"\\"+Parameter_DEVICE_AREA+"\\"+Parameter_DEVICE_ID;
+            string FilePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\" + Parameter_DEVICE_AREA + "\\" + Parameter_DEVICE_ID;
             string FileDirectory_SendBackup = FilePath + "\\SendDataBackup";
             string FileDirectory_ReturnBackup = FilePath + "\\RcvDataBackup";
 
@@ -378,7 +379,7 @@ namespace Agent_ClassLibrary
             ht_Query.Add("@TXTName", TXTFileName);
             ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
             ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
-            //ht_Query.Add("@OrderNo", BATCHID);
+
             Hashtable ht_return = new Hashtable();
             ht_return.Add("@S_result", "");
             DataTable dt = db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_return).Tables[0];
@@ -397,7 +398,7 @@ namespace Agent_ClassLibrary
                     cmd_Query = "spUD_LCU_TERAOKA_LCU700_V2_CreateTXT";
                     break;
             }
-            Agent_WriteLog("GetTxtFromLCU+Mode " + cmd_Query);
+            Agent_WriteLog("GetTxtFromLCU:" + cmd_Query + " Mode:" + Mode);
 
             Hashtable ht_Query = new Hashtable();
             ht_Query.Add("@TXTName", TXTFileName);
