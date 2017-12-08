@@ -88,6 +88,7 @@ namespace Agent_LCU
             #endregion
 
             #region 下載LCU0301.TXT
+            string FilePath_ReturnBackup = Program.FileDirectory_ReturnBackup + @"\" + DateTime.Now.ToString("yyyyMMddHHmmss") + FileName;  //備份檔案
             Program.ftpclient.download(FileName, FilePath);
             if (File.Exists(FilePath))
             {
@@ -98,6 +99,9 @@ namespace Agent_LCU
                 ErrMsg = " " + FileName + " 下載失敗";
                 return ErrMsg;
             }
+
+            //備份回傳結果
+            File.Copy(FilePath, FilePath_ReturnBackup);
             #endregion
 
             #region LCU0301.TXT轉為C#_DataTable

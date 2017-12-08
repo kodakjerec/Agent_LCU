@@ -125,7 +125,7 @@ namespace Agent_LCU
                 #region 下傳TXT.tmp, 確定下傳完成後再更改名稱
                 Program.ftpclient.upload(FileName + ".tmp", FilePath);
 
-                ErrMsg=Program.comQryLCU.FTPCheckFileUploadOK(FileName + ".tmp", ref Program.ftpclient,0);
+                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileName + ".tmp", ref Program.ftpclient, 0);
                 if (ErrMsg != "")
                 {
                     return ErrMsg;
@@ -139,7 +139,7 @@ namespace Agent_LCU
                 #region 檢查檔案是否已經成功上傳,ISHIDA會回傳【結果】
                 FilePath = Program.FileDirectory + @"\" + FileNameReturn;     //輸出文字檔目錄
 
-                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileNameReturn, ref Program.ftpclient,1);
+                ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileNameReturn, ref Program.ftpclient, 1);
                 if (ErrMsg != "")
                 {
                     return ErrMsg;
@@ -149,10 +149,24 @@ namespace Agent_LCU
                 #endregion
 
                 #region 下傳txt成功後，回寫輸出檔
-                if (TXTfile_KeyValue == "HST0023" || TXTfile_KeyValue == "HST0025")
+                string UpdateDB = "";
+                switch (TXTfile_KeyValue)
                 {
-                    string UpdateDB = "HST0023OK";
-                    Program.comQryLCU.GetTxtFromLCU(ref UpdateDB, ref GUID);
+                    case "HST0023":
+                    case "HST0025":
+                        UpdateDB = "HST0023OK";
+                        Program.comQryLCU.GetTxtFromLCU(ref UpdateDB, ref GUID);
+                        break;
+                    case "HST0021":
+                        UpdateDB = "HST0021OK";
+                        Program.comQryLCU.GetTxtFromLCU(ref UpdateDB, ref GUID);
+                        break;
+                    case "HST0022":
+                        UpdateDB = "HST0022OK";
+                        Program.comQryLCU.GetTxtFromLCU(ref UpdateDB, ref GUID);
+                        break;
+                    default:
+                        break;
                 }
                 #endregion
             }

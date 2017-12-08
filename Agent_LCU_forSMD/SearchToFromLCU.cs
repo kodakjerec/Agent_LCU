@@ -40,7 +40,7 @@ namespace Agent_LCU
             #region 開始下傳TXT, 根據指定的文字檔和裝置
             string FileName = TXTfile_KeyValue + ".TXT"                 //檔案名稱
                 , FilePath = Program.FileDirectory + @"\" + FileName     //輸出文字檔目錄
-                , FileNameReturn = TXTfile_KeyValue.Replace("HST02","LCU03") + ".TXT"    //檔案名稱(回收)
+                , FileNameReturn = TXTfile_KeyValue.Replace("HST02", "LCU03") + ".TXT"    //檔案名稱(回收)
                 , FilePathReturn = Program.FileDirectory + @"\" + FileNameReturn;//輸出文字檔目錄(回收)
             #endregion
 
@@ -48,18 +48,17 @@ namespace Agent_LCU
             using (StreamWriter sw_OutPutSPACETXT = new StreamWriter(FilePath, false, System.Text.Encoding.Default))
             {
                 sw_OutPutSPACETXT.Write("");
-                sw_OutPutSPACETXT.Dispose();
-                sw_OutPutSPACETXT.Close();
-                Program.ftpclient.upload(FileName, FilePath);
-                Program.comQryLCU.Agent_WriteLog(" " + FileName + " 下傳成功");
-
-                //不會回傳訊息, 給包裝機緩衝時間
-                Thread.Sleep(2000);
             }
+            Program.ftpclient.upload(FileName, FilePath);
+            Program.comQryLCU.Agent_WriteLog(" " + FileName + " 下傳成功");
+
+            //不會回傳訊息, 給包裝機緩衝時間
+            Thread.Sleep(2000);
+
             #endregion
 
             #region 檢查回收檔案是否已經產生
-            ErrMsg=Program.comQryLCU.FTPCheckFileUploadOK(FileNameReturn, ref Program.ftpclient,0);
+            ErrMsg = Program.comQryLCU.FTPCheckFileUploadOK(FileNameReturn, ref Program.ftpclient, 0);
             if (ErrMsg != "")
             {
                 return ErrMsg;

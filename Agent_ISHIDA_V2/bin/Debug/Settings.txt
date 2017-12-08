@@ -1,6 +1,0 @@
-﻿[
-  {
-    "DB_FileName": "DB_IO_Database_json.txt",
-    "DB_FilePath": ""
-  }
-]

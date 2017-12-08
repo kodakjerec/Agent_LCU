@@ -10,8 +10,10 @@ namespace Agent_ClassLibrary
     public class CommonQueryLCU
     {
         public DB_IO.Connect db_io = new DB_IO.Connect();
-        public string Parameter_DEVICE_AREA;
-        public string Parameter_DEVICE_ID;
+        public string Parameter_DEVICE_AREA;//區域
+        public string Parameter_DEVICE_ID;  //裝置
+        public string Parameter_DEVICE_IP = "";       //裝置IP
+        public int Parameter_Version;   //版本
         public string Step;
 
         #region DDI_Upper轉檔至DDI_Under
@@ -20,6 +22,18 @@ namespace Agent_ClassLibrary
         /// </summary>
         public void UpperToUnder()
         {
+            string cmd_Query = "";
+            switch (Parameter_Version)
+            {
+                case 1:
+                    cmd_Query = "spUD_LCU_TERAOKA_V1_EXAMINE";
+                    break;
+                case 2:
+                    cmd_Query = "spUD_LCU_TERAOKA_V2_EXAMINE";
+                    break;
+            }
+            Agent_WriteLog("UpperTOUnder " + cmd_Query);
+
             Hashtable ht_Query = new Hashtable();
             ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
             ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
@@ -27,7 +41,7 @@ namespace Agent_ClassLibrary
             ht_Query.Add("@OrderType", "");
             Hashtable ht_Return = new Hashtable();
 
-            db_io.SqlSp("DDI_UNDER", "spUD_LCU_TERAOKA_V1_EXAMINE", ht_Query, ref ht_Return);
+            db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_Return);
         }
         #endregion
 
@@ -103,7 +117,7 @@ namespace Agent_ClassLibrary
         {
             string cmd_Query =
             @"Select 
-                DEVICE_IP 
+                DEVICE_IP, DEVICE_VERSION
             From 
                 [vDDI_DEVICE] with(nolock) 
             WHERE 
@@ -113,6 +127,16 @@ namespace Agent_ClassLibrary
             ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
             ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
             DataTable dt = db_io.SqlQuery("DDI", cmd_Query, ht_Query).Tables[0];
+
+            //取得要連結到的FTP IP
+            if (dt.Rows.Count <= 0)
+            {
+                throw new Exception("無法取得ftp IP");
+            }
+            else {
+                Parameter_DEVICE_IP = dt.Rows[0][0].ToString();
+                Parameter_Version = Convert.ToInt32(dt.Rows[0][1]);
+            }
             return dt;
         }
         #endregion
@@ -240,27 +264,15 @@ namespace Agent_ClassLibrary
         /// </summary>
         public void FTP_TryConnection(ref ftpClient ftpclient)
         {
-            #region 取得要連結到的FTP IP
-            Step = "取得ftpIP";
-            DataTable dt_LCUIPList = GetIPList();
-            if (dt_LCUIPList.Rows.Count <= 0)
-            {
-                throw new Exception("無法取得ftp IP");
-            }
-            #endregion
-
-            DataRow dr_LCUIPList = dt_LCUIPList.Rows[0];
-            string DEVICE_IP = dr_LCUIPList[0].ToString();
-
             #region 設定ftp連線
             Step = "設定ftp";
 
             //連結ftp
-            ftpclient = new ftpClient(@"ftp://" + DEVICE_IP + @":21/", "anonymous", "anonymous");
+            ftpclient = new ftpClient(@"ftp://" + Parameter_DEVICE_IP + @":21/", "anonymous", "anonymous");
 
             //測試連線是否正常
             ftpclient.directoryListSimple(@"/");
-            Agent_WriteLog("PC<->" + Parameter_DEVICE_ID + " " + DEVICE_IP);
+            Agent_WriteLog("PC<->" + Parameter_DEVICE_ID + " " + Parameter_DEVICE_IP);
 
             //建立暫存檔資料夾
             string FileDirectory = System.AppDomain.CurrentDomain.BaseDirectory + Parameter_DEVICE_AREA + @"\" + Parameter_DEVICE_ID;
@@ -350,7 +362,18 @@ namespace Agent_ClassLibrary
         /// <returns></returns>
         public DataTable GetTxtFromLCU(ref string TXTFileName, ref string BATCHID)
         {
-            string cmd_Query = "spUD_LCU_TERAOKA_LCU700_V1_CreateTXT";
+            string cmd_Query = "";
+            switch (Parameter_Version)
+            {
+                case 1:
+                    cmd_Query = "spUD_LCU_TERAOKA_LCU700_V1_CreateTXT";
+                    break;
+                case 2:
+                    cmd_Query = "spUD_LCU_TERAOKA_LCU700_V2_CreateTXT";
+                    break;
+            }
+            Agent_WriteLog("GetTxtFromLCU " + cmd_Query);
+
             Hashtable ht_Query = new Hashtable();
             ht_Query.Add("@TXTName", TXTFileName);
             ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
@@ -364,26 +387,23 @@ namespace Agent_ClassLibrary
         }
         public DataTable GetTxtFromLCU(ref string TXTFileName, ref string BATCHID, string Mode)
         {
-            string cmd_Query = "spUD_LCU_TERAOKA_LCU700_V1_CreateTXT";
+            string cmd_Query = "";
+            switch (Parameter_Version)
+            {
+                case 1:
+                    cmd_Query = "spUD_LCU_TERAOKA_LCU700_V1_CreateTXT";
+                    break;
+                case 2:
+                    cmd_Query = "spUD_LCU_TERAOKA_LCU700_V2_CreateTXT";
+                    break;
+            }
+            Agent_WriteLog("GetTxtFromLCU+Mode " + cmd_Query);
+
             Hashtable ht_Query = new Hashtable();
             ht_Query.Add("@TXTName", TXTFileName);
             ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
             ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
             ht_Query.Add("@Mode", Mode);
-            Hashtable ht_return = new Hashtable();
-            ht_return.Add("@S_result", "");
-            DataTable dt = db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_return).Tables[0];
-            TXTFileName = ht_return["@S_result"].ToString();
-            return dt;
-        }
-        public DataTable GetTxtFromLCU_V2(ref string TXTFileName, ref string BATCHID)
-        {
-            string cmd_Query = "spUD_LCU_TERAOKA_LCU700_V2_CreateTXT";
-            Hashtable ht_Query = new Hashtable();
-            ht_Query.Add("@TXTName", TXTFileName);
-            ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
-            ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
-            //ht_Query.Add("@OrderNo", BATCHID);
             Hashtable ht_return = new Hashtable();
             ht_return.Add("@S_result", "");
             DataTable dt = db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_return).Tables[0];

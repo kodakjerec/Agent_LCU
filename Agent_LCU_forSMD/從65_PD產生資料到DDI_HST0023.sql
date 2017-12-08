@@ -1,3 +1,6 @@
+USE DDI_UNDER
+GO
+
 SET NOCOUNT ON
 /*
 搭配 Agent_LCU_forSMD 可以快速下傳到指定FTP
@@ -8,25 +11,24 @@ select * from SMD_DEVICE where ID like 'PC4%'
 
 
 DECLARE 
-	@DEVICE_AREA	varchar(50)='A4WS1'	--不用改
+	@DEVICE_AREA	varchar(50)='PC2'	--不用改
 	,@DEVICE_ID		varchar(50)='LCU1'	--不用改
-	,@ID			varchar(50)='PC1LCUDAS'
-	,@D_DATE		varchar(10)='2017-09-27' 
-	,@CALLING_NUM	varchar(10)='310664'
+	,@ID			varchar(50)='PC2LCUDAS'
+	,@SMD_JOBID		varchar(10)='17120502' 
+	,@CALLING_NUM	varchar(10)=''
 
 
 --取得HID
 DECLARE @HID varchar(50)=''
 select @HID=HID
 from [192.168.100.65].SMD.dbo.SMD_DEVICE with(nolock)
-where ID='PC1LCUDAS'
+where ID=@ID
 
 --自動取得當期OrderNo
 DECLARE @OrderNo varchar(50)=''
-SELECT @OrderNo=ISNULL(OrderNo,'')
+SELECT @OrderNo=MAX(ISNULL(OrderNo,''))
 FROM [DDI].[dbo].[DDI_WORKSPACE_STATUS]
-WHERE WORKSPACE=@DEVICE_AREA
-	AND DEVICE_ID=@DEVICE_ID
+WHERE  DEVICE_ID=@DEVICE_ID
 	AND [WORKSTATUS] in(0,2)
 
 IF(@OrderNo='')
@@ -35,9 +37,9 @@ BEGIN
 END
 
 DELETE FROM [ob.DDI_UD_LCU_TERAOKA_LCU700_V2_HST0023]
-WHERE Field03=@CALLING_NUM
+WHERE (Field03=@CALLING_NUM or ''=@CALLING_NUM)
 
-INSERT INTO [ob.DDI_UD_LCU_TERAOKA_LCU700_V2_HST0023]
+--INSERT INTO [ob.DDI_UD_LCU_TERAOKA_LCU700_V2_HST0023]
 select 
 	Field01='CS'
 	,Field02=BATCH_ID		--班別
@@ -77,7 +79,7 @@ select
 	,Field36='00000'
 	,Field37='0'
 	,@OrderNo
-	,@DEVICE_AREA
+	,@ID
 	,@DEVICE_ID
 	,TXTSEQ=SEQ_ID
 	,[Status]=0
@@ -86,9 +88,39 @@ LEFT JOIN [192.168.100.65].SMD.dbo.SMD_ITEM IT ON PD.ITEM_ID = IT.ID AND IT.COM_
 LEFT JOIN [192.168.100.65].SMD.dbo.SMD_INTERFACE_SAVEING_TYPE SAV ON IT.ID = SAV.ID
 LEFT JOIN [192.168.100.65].SMD.dbo.smd_EL_ITEM EL ON EL.[TYPE]=4 AND EL.VALUE>0 AND PD.CALLING_NUM=EL.CN
 WHERE PD.HID = @HID
-	AND PD.D_DATE = @D_DATE
-	AND PD.CALLING_NUM= @CALLING_NUM
+	AND PD.ID = @SMD_JOBID
+	AND (PD.CALLING_NUM= @CALLING_NUM or ''=@CALLING_NUM)
 	-- AND PD.LCU_STATUS = 99
 ORDER BY PD.SEQ_ID
 
 print '已新增 '+convert(varchar,@@ROWCOUNT)+' 筆資料'
+
+
+/*
+/*實績比對*/
+drop table #tmp1
+drop table #tmp2
+
+select CALLING_NUM, STR_ID, Assign_Qty=SUM(QTY)
+INTO #tmp1
+from SMD_DCS_LCU_PD a with(nolock)
+where ID='17110201'
+	and HID like '\PXG\SMD\PC2\LCU700\'
+GROUP BY CALLING_NUM, STR_ID
+ORDER BY CALLING_NUM, STR_ID
+
+select FIeld03,Field05,ACT_qty=SUM(Field10)
+Into #tmp2
+from LCU_0301 with(nolock)
+where Device_ID='PC2LCUDAS'
+group by Field03,Field05
+order by Field03,Field05
+
+
+select a.*,ACT_qty=ISNULL(b.ACT_qty,0),Last_Qty=a.Assign_Qty-ISNULL(b.ACT_qty,0)
+from #tmp1 a
+left join #tmp2 b
+on a.CALLING_NUM=b.Field03
+	and a.STR_ID=b.Field05
+
+*/

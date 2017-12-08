@@ -163,47 +163,48 @@ namespace Agent_ISHIDA
                 #endregion
 
                 #region 解析【ISHIDA回傳結果】是否正常
+                string AllData = "";
                 using (StreamReader s = new StreamReader(FilePath, System.Text.Encoding.UTF8))
                 {
-                    string AllData = s.ReadToEnd();
-                    string[] rows = AllData.Split("\n".ToCharArray());
+                    AllData = s.ReadToEnd();
+                }
+                string[] rows = AllData.Split("\n".ToCharArray());
 
-
-                    foreach (string r in rows)
+                foreach (string r in rows)
+                {
+                    string[] items = r.Split(',');
+                    //第一行是欄位名稱
+                    //第二行裁示回傳結果
+                    if (items[0] == TXTfile_ReturnValue)
                     {
-                        string[] items = r.Split(',');
-                        //第一行是欄位名稱
-                        //第二行裁示回傳結果
-                        if (items[0] == TXTfile_ReturnValue)
+                        //異常
+                        if (items[1] == "9")
                         {
-                            //異常
-                            if (items[1] == "9")
+                            string MSG = items[3];
+                            MSG = MSG.Substring(MSG.IndexOf("(") + 1, MSG.IndexOf(")") - MSG.IndexOf("(") - 1);
+                            switch (MSG)
                             {
-                                string MSG = items[3];
-                                MSG = MSG.Substring(MSG.IndexOf("(") + 1, MSG.IndexOf(")") - MSG.IndexOf("(") - 1);
-                                switch (MSG)
-                                {
-                                    case "400040":  //已經生產完成
-                                        break;
-                                    case "500030":  //找不到要刪除的資料
-                                        break;
-                                    case "500050":  //要登錄的資料已有登錄了
-                                        break;
-                                    case "500060":  //主檔中未登錄
-                                        break;
-                                    default:
-                                        ErrMsg += "ERROR: Line:" + items[2] + " Msg:" + items[3] + "\n";
-                                        break;
-                                }
-                                continue;
+                                case "400040":  //已經生產完成
+                                    break;
+                                case "500030":  //找不到要刪除的資料
+                                    break;
+                                case "500050":  //要登錄的資料已有登錄了
+                                    break;
+                                case "500060":  //主檔中未登錄
+                                    break;
+                                default:
+                                    ErrMsg += "ERROR: Line:" + items[2] + " Msg:" + items[3] + "\n";
+                                    break;
                             }
-                            else
-                            {
-                                Program.comQryLCU.Agent_WriteLog(" 成功刪除筆數" + items[4]);
-                            }
+                            continue;
+                        }
+                        else
+                        {
+                            Program.comQryLCU.Agent_WriteLog(" 成功刪除筆數" + items[4]);
                         }
                     }
                 }
+
                 #endregion
             }
             #endregion

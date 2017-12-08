@@ -121,32 +121,34 @@ namespace Agent_ISHIDA
                 //CSV -> DataTable
                 dt_ISHIDA_RFD100 = Program.comQryISHIDA.GetWhiteDT_ISHIDA_RFD100();
                 DateTime BatchTime_RFD100 = DateTime.Now;
+                string AllData = "";
                 using (StreamReader sr = new StreamReader(FilePath, System.Text.Encoding.UTF8))
                 {
-                    String AllData = sr.ReadToEnd();
-                    AllData = AllData.Replace("\r", "");   //回收檔案有\r, 過濾掉
-                    string[] rows = AllData.Split("\n".ToCharArray());
-                    for (int row_Number = 1; row_Number < rows.Length; row_Number++)
-                    {
-                        String[] inputList = rows[row_Number].Split(',');
-                        int inputListLength = inputList.Length;
-                        int inputListForLoop = 0;
-
-                        DataRow dr = dt_ISHIDA_RFD100.NewRow();
-                        inputListLength = inputList.Length;
-                        for (int StartIndex = inputListForLoop; StartIndex < inputListLength; StartIndex++)
-                        {
-                            dr[inputListForLoop] = inputList[StartIndex];
-                            inputListForLoop++;
-                        }
-
-                        dr[36] = Program.comQryLCU.Parameter_DEVICE_AREA;
-                        dr[37] = Program.comQryLCU.Parameter_DEVICE_ID;
-                        dr[38] = OrderNo;
-                        dr[39] = BatchTime_RFD100;
-                        dt_ISHIDA_RFD100.Rows.Add(dr);
-                    }
+                    AllData = sr.ReadToEnd();
                 }
+                AllData = AllData.Replace("\r", "");   //回收檔案有\r, 過濾掉
+                string[] rows = AllData.Split("\n".ToCharArray());
+                for (int row_Number = 1; row_Number < rows.Length; row_Number++)
+                {
+                    string[] inputList = rows[row_Number].Split(',');
+                    int inputListLength = inputList.Length;
+                    int inputListForLoop = 0;
+
+                    DataRow dr = dt_ISHIDA_RFD100.NewRow();
+                    inputListLength = inputList.Length;
+                    for (int StartIndex = inputListForLoop; StartIndex < inputListLength; StartIndex++)
+                    {
+                        dr[inputListForLoop] = inputList[StartIndex];
+                        inputListForLoop++;
+                    }
+
+                    dr[36] = Program.comQryLCU.Parameter_DEVICE_AREA;
+                    dr[37] = Program.comQryLCU.Parameter_DEVICE_ID;
+                    dr[38] = OrderNo;
+                    dr[39] = BatchTime_RFD100;
+                    dt_ISHIDA_RFD100.Rows.Add(dr);
+                }
+
                 #endregion
 
                 #region 上傳C#_DataTable給DB

@@ -71,8 +71,7 @@ namespace Agent_ISHIDA
 
                 comQryLCU.Parameter_DEVICE_AREA = args[0];
                 comQryLCU.Parameter_DEVICE_ID = args[1];
-                comQryISHIDA.Parameter_DEVICE_AREA = args[0];
-                comQryISHIDA.Parameter_DEVICE_ID = args[1];
+                comQryISHIDA.comQryLCUforISHIDA = comQryLCU;
 
                 bool IsAssignFile = false;   //1-有指定特定檔案
 
@@ -89,11 +88,19 @@ namespace Agent_ISHIDA
                 Directory.CreateDirectory(FileDirectory_SendBackup);
                 Directory.CreateDirectory(FileDirectory_ReturnBackup);
 
+                #region 取得要執行的版本號
+                comQryLCU.GetIPList();
+
+                //FTP測試連線
+                comQryLCU.FTP_TryConnection(ref ftpclient);
+                #endregion
+
+
                 bool IsKeepContinue = false;
                 ORDER_Start:
                 IsKeepContinue = false;
 
-                #region 先執行sp轉檔
+                #region 執行sp轉檔
                 try
                 {
                     comQryLCU.Step = "UPPER->UNDER";
@@ -116,15 +123,19 @@ namespace Agent_ISHIDA
                         comQryLCU.Agent_WriteLog(" 同裝置, 不用重複執行.");
                         return;
                     }
+                    else
+                    {
+                        //搶到發言權
+                        //為了降低迴圈發動程式的次數, 等待1秒
+                        Thread.Sleep(1000);
+                    }
+
                     string OrderNo = ""         //批次
                             , ORDER_TYPE = ""   //工作類型
                             , GUID_Msg = "";    //這筆Order_type對應那些Orders
 
                     try
                     {
-                        //FTP測試連線
-                        comQryLCU.FTP_TryConnection(ref ftpclient);
-
                         #region 取得待執行的sp清單 From OrderList
                         comQryLCU.Step = "取得Orders";
                         DataTable dt_WaitingForExe = comQryLCU.GetMiddleList();

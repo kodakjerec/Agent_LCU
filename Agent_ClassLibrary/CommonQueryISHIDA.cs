@@ -9,9 +9,9 @@ namespace Agent_ClassLibrary
 {
     public class CommonQueryISHIDA
     {
+        public CommonQueryLCU comQryLCUforISHIDA;
+
         public DB_IO.Connect db_io = new DB_IO.Connect();
-        public string Parameter_DEVICE_AREA;
-        public string Parameter_DEVICE_ID;
         public string Step;
 
         #region ISHIDA
@@ -24,11 +24,21 @@ namespace Agent_ClassLibrary
         /// <returns></returns>
         public DataTable GetTxtFromISHIDA(ref string TXTFileName, ref string BATCHID)
         {
-            string cmd_Query = "spUD_LCU_ISHIDA_PCRS_V1_CreateTXT";
+            string cmd_Query = "";
+            switch (comQryLCUforISHIDA.Parameter_Version) {
+                case 1:
+                    cmd_Query= "spUD_LCU_ISHIDA_PCRS_V1_CreateTXT";
+                    break;
+                case 2:
+                    cmd_Query = "spUD_LCU_ISHIDA_PCRS_V2_CreateTXT";
+                    break;
+            }
+            comQryLCUforISHIDA.Agent_WriteLog("GetTxtFromISHIDA " + cmd_Query);
+
             Hashtable ht_Query = new Hashtable();
             ht_Query.Add("@TXTName", TXTFileName);
-            ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
-            ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
+            ht_Query.Add("@DEVICE_AREA", comQryLCUforISHIDA.Parameter_DEVICE_AREA);
+            ht_Query.Add("@DEVICE_ID", comQryLCUforISHIDA.Parameter_DEVICE_ID);
             //ht_Query.Add("@OrderNo", BATCHID);
             Hashtable ht_return = new Hashtable();
             DataTable dt = db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_return).Tables[0];
@@ -43,24 +53,23 @@ namespace Agent_ClassLibrary
         /// <returns></returns>
         public DataTable GetTxtFromISHIDA(ref string TXTFileName, ref string BATCHID, string Mode)
         {
-            string cmd_Query = "spUD_LCU_ISHIDA_PCRS_V1_CreateTXT";
+            string cmd_Query = "";
+            switch (comQryLCUforISHIDA.Parameter_Version)
+            {
+                case 1:
+                    cmd_Query = "spUD_LCU_ISHIDA_PCRS_V1_CreateTXT";
+                    break;
+                case 2:
+                    cmd_Query = "spUD_LCU_ISHIDA_PCRS_V2_CreateTXT";
+                    break;
+            }
+            comQryLCUforISHIDA.Agent_WriteLog("GetTxtFromISHIDA+Mode " + cmd_Query);
+
             Hashtable ht_Query = new Hashtable();
             ht_Query.Add("@TXTName", TXTFileName);
-            ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
-            ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
+            ht_Query.Add("@DEVICE_AREA", comQryLCUforISHIDA.Parameter_DEVICE_AREA);
+            ht_Query.Add("@DEVICE_ID", comQryLCUforISHIDA.Parameter_DEVICE_ID);
             ht_Query.Add("@Mode", Mode);
-            Hashtable ht_return = new Hashtable();
-            DataTable dt = db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_return).Tables[0];
-            return dt;
-        }
-        public DataTable GetTxtFromISHIDA_V2(ref string TXTFileName, ref string BATCHID)
-        {
-            string cmd_Query = "spUD_LCU_ISHIDA_PCRS_V2_CreateTXT";
-            Hashtable ht_Query = new Hashtable();
-            ht_Query.Add("@TXTName", TXTFileName);
-            ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
-            ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
-            //ht_Query.Add("@OrderNo", BATCHID);
             Hashtable ht_return = new Hashtable();
             DataTable dt = db_io.SqlSp("DDI_UNDER", cmd_Query, ht_Query, ref ht_return).Tables[0];
             return dt;
@@ -101,8 +110,8 @@ namespace Agent_ClassLibrary
         {
             string cmd_Query = "spUD_LCU_ISHIDA_PCRS_V1_GET_RFD100";
             Hashtable ht_Query = new Hashtable();
-            ht_Query.Add("@DEVICE_AREA", Parameter_DEVICE_AREA);
-            ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
+            ht_Query.Add("@DEVICE_AREA", comQryLCUforISHIDA.Parameter_DEVICE_AREA);
+            ht_Query.Add("@DEVICE_ID", comQryLCUforISHIDA.Parameter_DEVICE_ID);
             Hashtable ht_return = new Hashtable();
             ht_return.Add("@I_result", 0);
             ht_return.Add("@S_result", "");

@@ -60,5 +60,27 @@ namespace Agent_ClassLibrary
             DataTable dt = db_io.SqlQuery("SMD", cmd_Query, ht_Query).Tables[0];
             return dt;
         }
+
+        #region 批次管理
+        /// <summary>
+        /// 結束批次
+        /// </summary>
+        /// <param name="DEVICE_AREA"></param>
+        /// <param name="DEVICE_ID"></param>
+        /// <param name="BATCHID"></param>
+        public string GetOrderNo()
+        {
+            Hashtable ht_Query = new Hashtable();
+            string cmd_Query =
+            @"SELECT TOP 1 OrderNo FROM DDI.dbo.DDI_WORKSPACE_STATUS with(nolock) where DEVICE_ID=@DEVICE_ID";
+            ht_Query.Add("@DEVICE_ID", Parameter_DEVICE_ID);
+            ht_Query.Add("@Status", 0);
+            DataTable dt = db_io.SqlQuery("DDI", cmd_Query, ht_Query).Tables[0];
+            if (dt.Rows.Count > 0)
+                return dt.Rows[0][0].ToString();
+            else
+                return "";
+        }
+        #endregion
     }
 }

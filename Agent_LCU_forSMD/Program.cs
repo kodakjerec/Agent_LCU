@@ -79,8 +79,8 @@ namespace Agent_LCU
                 //應用程式例外訊息處理
                 AppExceptionHandle();
 
-                comQryLCU.Parameter_DEVICE_AREA = "A4WS1";
-                comQryLCU.Parameter_DEVICE_ID = "LCU1";
+                comQryLCU.Parameter_DEVICE_AREA = args[0];
+                comQryLCU.Parameter_DEVICE_ID = args[1];
                 comQryLCU_forSMD.Parameter_DEVICE_AREA = args[0];
                 comQryLCU_forSMD.Parameter_DEVICE_ID = args[1];
 
@@ -107,8 +107,8 @@ namespace Agent_LCU
                 try
                 {
                     comQryLCU.Step = "UPPER->UNDER";
-                    comQryLCU.UpperToUnder();
-                    comQryLCU.Agent_WriteLog("轉檔結束");
+                    //comQryLCU.UpperToUnder();
+                    comQryLCU.Agent_WriteLog("SMD不做 轉檔結束");
                 }
                 catch (Exception e)
                 {
@@ -147,7 +147,7 @@ namespace Agent_LCU
                         if (IsAssignFile)
                         {
                             DataRow dr = dt_WaitingForExe.NewRow();
-                            dr[0] = comQryLCU.GetOrderNo();
+                            dr[0] = comQryLCU_forSMD.GetOrderNo();
                             dr[1] = args[2];
                             dr[2] = "";
                             dt_WaitingForExe.Rows.Add(dr);
