@@ -176,8 +176,7 @@ namespace Agent_ClassLibrary
         public string FTPCheckFileUploadOK(string FileName, ref ftpClient ftp, int ExistType)
         {
             bool IsOK = false;
-            int CheckSecond = 0;
-            int MaxSeconds = 30;
+            int CheckSecond = 0, MaxSeconds_0 = 3600, MaxSeconds_1=3600;
             string[] files;
 
             //第一關：檢查檔案存在
@@ -185,43 +184,46 @@ namespace Agent_ClassLibrary
             try
             {
                 IsOK = false;
+                CheckSecond = 0;
 
-                while (true)
+                if (ExistType == 0)
                 {
-                    //CheckFileSize = ftp.getFileSize(FileName);
-                    //CheckSecond = MaxWaitSecond + 1;
-                    //Steps = 1;
-
-                    files = ftp.directoryListSimple("");
-                    foreach (string file in files)
+                    while (CheckSecond <= MaxSeconds_0)
                     {
-                        if (file == FileName)
+                        //CheckFileSize = ftp.getFileSize(FileName);
+                        //CheckSecond = MaxWaitSecond + 1;
+                        //Steps = 1;
+
+                        files = ftp.directoryListSimple("");
+                        foreach (string file in files)
                         {
-                            IsOK = true;
-                            break;
+                            if (file == FileName)
+                            {
+                                IsOK = true;
+                                break;
+                            }
                         }
-                    }
 
-                    if (IsOK)
-                        break;
-
-                    if (ExistType == 1)
-                    {
-                        if (CheckSecond >= MaxSeconds)
+                        if (IsOK)
                             break;
-                    }
 
-                    Thread.Sleep(1000);
-                    CheckSecond += 1;
-                    Console.CursorLeft = 0;
-                    Console.Write(CheckSecond.ToString() + "...");
+                        Thread.Sleep(1000);
+                        CheckSecond += 1;
+                        Console.CursorLeft = 0;
+                        Console.Write(CheckSecond.ToString() + "...");
+                    }
+                    Console.WriteLine("");
+                    if (CheckSecond > MaxSeconds_0)
+                    {
+                        throw new Exception("檢查檔案存在 超過 " + MaxSeconds_0.ToString() + " 秒");
+                    }
                 }
-                Console.WriteLine("");
 
                 //第二關：檔案要消失, 才能離開
                 if (ExistType == 1)
                 {
-                    while (true)
+                    CheckSecond = 0;
+                    while (CheckSecond<= MaxSeconds_1)
                     {
                         IsOK = true;
                         files = ftp.directoryListSimple("");
@@ -241,6 +243,10 @@ namespace Agent_ClassLibrary
                         Console.Write(CheckSecond.ToString() + "...");
                     }
                     Console.WriteLine("");
+                    if (CheckSecond > MaxSeconds_1)
+                    {
+                        throw new Exception("檢查檔案消失 超過 " + MaxSeconds_1.ToString() + " 秒");
+                    }
                 }
             }
             catch (Exception ex)
