@@ -330,7 +330,7 @@ namespace Agent_ClassLibrary
             string[] files = Directory.GetFiles(FilePathLog);
             foreach (string file in files)
             {
-                if (File.GetLastWriteTime(file) <= DateTime.Now.AddDays(-7))
+                if (File.GetLastWriteTime(file) <= DateTime.Now.AddDays(-3))
                     File.Delete(file);
             }
 
@@ -338,7 +338,7 @@ namespace Agent_ClassLibrary
             files = Directory.GetFiles(FileDirectory_SendBackup);
             foreach (string file in files)
             {
-                if (File.GetLastWriteTime(file) <= DateTime.Now.AddDays(-7))
+                if (File.GetLastWriteTime(file) <= DateTime.Now.AddDays(-3))
                     File.Delete(file);
             }
 
@@ -346,7 +346,7 @@ namespace Agent_ClassLibrary
             files = Directory.GetFiles(FileDirectory_ReturnBackup);
             foreach (string file in files)
             {
-                if (File.GetLastWriteTime(file) <= DateTime.Now.AddDays(-7))
+                if (File.GetLastWriteTime(file) <= DateTime.Now.AddDays(-3))
                     File.Delete(file);
             }
 

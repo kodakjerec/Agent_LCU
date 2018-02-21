@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent_ClassLibrary", "Agent
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent_LCU_forSMD", "Agent_LCU_forSMD\Agent_LCU_forSMD.csproj", "{0814CD9F-9A43-42AE-8E63-59FEEF6BD930}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent_WAS", "Agent_WAS\Agent_WAS.csproj", "{8E1C3163-2ED0-4863-A827-F08B29BF6A6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{0814CD9F-9A43-42AE-8E63-59FEEF6BD930}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0814CD9F-9A43-42AE-8E63-59FEEF6BD930}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0814CD9F-9A43-42AE-8E63-59FEEF6BD930}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E1C3163-2ED0-4863-A827-F08B29BF6A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E1C3163-2ED0-4863-A827-F08B29BF6A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E1C3163-2ED0-4863-A827-F08B29BF6A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E1C3163-2ED0-4863-A827-F08B29BF6A6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

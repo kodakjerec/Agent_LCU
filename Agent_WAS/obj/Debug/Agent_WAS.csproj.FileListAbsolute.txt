@@ -1,0 +1,12 @@
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\bin\Debug\DB_IO_Database_json.txt
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\bin\Debug\Settings.txt
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\bin\Debug\Agent_ClassLibrary.dll
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\bin\Debug\DB_IO.dll
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\bin\Debug\Newtonsoft.Json.dll
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\bin\Debug\Agent_ClassLibrary.pdb
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\bin\Debug\Newtonsoft.Json.xml
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\obj\Debug\Agent_WAS.csprojResolveAssemblyReference.cache
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\bin\Debug\WAS_RD2_WAS_1.exe
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\bin\Debug\WAS_RD2_WAS_1.pdb
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\obj\Debug\WAS_RD2_WAS_1.exe
+F:\Projects\SMD\SMD_LCU_Sync\Agent_LCU_v1\Agent_WAS\obj\Debug\WAS_RD2_WAS_1.pdb

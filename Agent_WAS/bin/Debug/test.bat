@@ -1,0 +1,2 @@
+REM 正常使用方式
+WAS_RD2_WAS_1 WAS WAS
