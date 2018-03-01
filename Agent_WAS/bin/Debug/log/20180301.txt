@@ -1,0 +1,12 @@
+14:37:38^^^進入程式^傳入參數：WAS,WAS,
+14:37:38^WAS^WAS^進入程式^UpperTOUnder spUD_WAS_RD2_V1_EXAMINE
+14:37:38^WAS^WAS^進入程式^System.Data.SqlClient.SqlException: 找不到預存程序 'spUD_WAS_RD2_V1_EXAMINE'。
+   於 DB_IO.Connect.SqlSp(String strDB, String SpName, Hashtable Prm, Hashtable& OutPrm)
+   於 Agent_ClassLibrary.CommonQueryWAS.UpperToUnder() 於 D:\Users\kota_ching\Desktop\交接\生鮮\包裝機\Agent_LCU_v1\Agent_ClassLibrary\CommonQueryWAS.cs: 行 42
+   於 Agent_WAS.Program.Main(String[] args) 於 D:\Users\kota_ching\Desktop\交接\生鮮\包裝機\Agent_LCU_v1\Agent_WAS\Program.cs: 行 92
+14:37:55^^^進入程式^傳入參數：WAS,WAS,
+14:37:55^WAS^WAS^進入程式^UpperTOUnder spUD_WAS_RD2_V1_EXAMINE
+14:37:55^WAS^WAS^進入程式^System.Data.SqlClient.SqlException: 找不到預存程序 'spUD_WAS_RD2_V1_EXAMINE'。
+   於 DB_IO.Connect.SqlSp(String strDB, String SpName, Hashtable Prm, Hashtable& OutPrm)
+   於 Agent_ClassLibrary.CommonQueryWAS.UpperToUnder() 於 D:\Users\kota_ching\Desktop\交接\生鮮\包裝機\Agent_LCU_v1\Agent_ClassLibrary\CommonQueryWAS.cs: 行 42
+   於 Agent_WAS.Program.Main(String[] args) 於 D:\Users\kota_ching\Desktop\交接\生鮮\包裝機\Agent_LCU_v1\Agent_WAS\Program.cs: 行 92

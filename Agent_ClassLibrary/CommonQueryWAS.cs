@@ -24,10 +24,10 @@ namespace Agent_ClassLibrary
             switch (comQryLCUforISHIDA.Parameter_Version)
             {
                 case 1:
-                    cmd_Query = "spUD_WAS_RD2_V1_EXAMINE";
+                    cmd_Query = "spUD_WAS_RD2_WAS_V1_EXAMINE";
                     break;
                 case 2:
-                    cmd_Query = "spUD_WAS_RD2_V1_EXAMINE";
+                    cmd_Query = "spUD_WAS_RD2_WAS_V2_EXAMINE";
                     break;
             }
             comQryLCUforISHIDA.Agent_WriteLog("UpperTOUnder " + cmd_Query);
@@ -53,10 +53,10 @@ namespace Agent_ClassLibrary
             switch (comQryLCUforISHIDA.Parameter_Version)
             {
                 case 1:
-                    cmd_Query = "spUD_WAS_RD2_V1_EXAMINE";
+                    cmd_Query = "spUD_WAS_RD2_WAS_V1_EXAMINE";
                     break;
                 case 2:
-                    cmd_Query = "spUD_WAS_RD2_V1_EXAMINE";
+                    cmd_Query = "spUD_WAS_RD2_WAS_V2_EXAMINE";
                     break;
             }
             comQryLCUforISHIDA.Agent_WriteLog("UpperTOUnder " + cmd_Query);

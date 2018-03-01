@@ -85,12 +85,19 @@ namespace Agent_WAS
                 Directory.CreateDirectory(FileDirectory_SendBackup);
                 Directory.CreateDirectory(FileDirectory_ReturnBackup);
 
-                //WAS都是由 sql sp負責轉檔
-                //前端只有負責呼叫sp
-                comQryWAS.UpperToUnder();
-                comQryWAS.UnderToWAS();
-                if (args.Length > 2)
-                    comQryLCU.Agent_Clean();
+                try
+                {
+                    //WAS都是由 sql sp負責轉檔
+                    //前端只有負責呼叫sp
+                    comQryWAS.UpperToUnder();
+                    comQryWAS.UnderToWAS();
+                    if (args.Length > 2)
+                        comQryLCU.Agent_Clean();
+                }
+                catch (Exception ex)
+                {
+                    comQryLCU.Agent_WriteLog(ex.ToString());
+                }
             }
         }
 
